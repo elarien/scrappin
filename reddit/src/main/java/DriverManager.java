@@ -10,4 +10,10 @@ public class DriverManager {
     public static WebDriver getDriver() {
         return webDriver.get();
     }
+
+    public static void quitDriver(){
+        webDriver.get().close();
+        webDriver.get().quit();
+        webDriver.remove();
+    }
 }

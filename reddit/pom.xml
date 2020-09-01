@@ -21,6 +21,5 @@
     </properties>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
     </build>
 </project>
