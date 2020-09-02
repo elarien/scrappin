@@ -1,18 +1,24 @@
+import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.internal.connection.Time;
+import org.bson.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scrapper {
-    private static HomePage homePage;
-
     public static void main(String[] args) {
-        homePage = new HomePage();
-
+        HomePage homePage = new HomePage();
+        MongoDatabase mongoDb = connectToMongo();
         initialiseBrowser();
+
         homePage.goTo();
         homePage.listTopArticles();
         List<WebElement> elements = homePage.getAllArticles();
@@ -28,8 +34,21 @@ public class Scrapper {
 
             subreddits.add(subReddit);
         }
+        MongoCollection<Document> mongoCollection = mongoDb.getCollection("test");
+        for (String subreddit : subreddits) {
+            Document document = new Document(String.valueOf(Time.nanoTime()), subreddit);
+            mongoCollection.insertOne(document);
+        }
 
         closeBrowser();
+    }
+
+    private static MongoDatabase connectToMongo() {
+        MongoClientURI uri = new MongoClientURI(
+                "mongodb+srv://elarien:blabla2012@subreddits.a1ige.mongodb.net/subreddits?retryWrites=true&w=majority");
+
+        MongoClient mongoClient = new MongoClient(uri);
+        return mongoClient.getDatabase("subreddits");
     }
 
     private static void initialiseBrowser() {
