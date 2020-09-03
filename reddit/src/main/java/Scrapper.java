@@ -10,11 +10,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
-public class Scrapper {
-    public static void main(String[] args) {
+public class Scrapper extends TimerTask {
+    @Override
+    public void run() {
+        System.out.println("Begin scrapping: " + LocalDateTime.now());
         HomePage homePage = new HomePage();
         MongoDatabase mongoDb = connectToMongo();
         initialiseBrowser();
@@ -41,6 +45,7 @@ public class Scrapper {
         }
 
         closeBrowser();
+        System.out.println("End scrapping: " + LocalDateTime.now());
     }
 
     private static MongoDatabase connectToMongo() {
@@ -58,4 +63,6 @@ public class Scrapper {
     private static void closeBrowser() {
         DriverManager.quitDriver();
     }
+
+
 }
