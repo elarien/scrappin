@@ -17,7 +17,6 @@ public class BrowserActions {
     public static List<WebElement> getAllArticles(By locator, int pages) {
         for (int i = 1; i <= pages; i++) {
             waitForElementsToReachCount(locator, i * 10);
-            System.out.println(waitAndGetElements(locator, DriverManager.getDriver()).size());
             scrollToTheEnd();
         }
         return waitAndGetElements(locator, DriverManager.getDriver());
